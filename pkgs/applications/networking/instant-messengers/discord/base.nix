@@ -35,6 +35,7 @@ in stdenv.mkDerivation rec {
     gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
     libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
     libXtst nspr nss libxcb pango systemd libXScrnSaver
+    libappindicator-gtk3
    ];
 
   installPhase = ''
