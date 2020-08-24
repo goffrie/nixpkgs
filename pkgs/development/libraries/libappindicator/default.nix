@@ -7,6 +7,7 @@
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
 , vala, gobject-introspection
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
+, gtk-doc
  }:
 
 with lib;
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v5nkfzid0faa1k71mlm8jqaljfj2ly6d0qidb1ja79d4zmnbnb0";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook vala gobject-introspection ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook vala gobject-introspection gtk-doc ];
 
   propagatedBuildInputs =
     if gtkVersion == "2"
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
   ] ++ (if gtkVersion == "2"
     then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ libindicator-gtk3 ]);
+
+  preAutoreconf = "gtkdocize";
 
   configureFlags = [
     "CFLAGS=-Wno-error"
