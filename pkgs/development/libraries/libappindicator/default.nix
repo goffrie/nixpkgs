@@ -1,6 +1,6 @@
 # TODO: Resolve the issues with the Mono bindings.
 
-{ stdenv, fetchurl, fetchpatch, lib
+{ stdenv, fetchbzr, fetchpatch, lib
 , pkgconfig, autoreconfHook
 , glib, dbus-glib, gtkVersion ? "3"
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
@@ -15,15 +15,14 @@ with lib;
 stdenv.mkDerivation rec {
   name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
           in "libappindicator-${postfix}-${version}";
-  version = "${versionMajor}.${versionMinor}";
-  versionMajor = "12.10";
-  versionMinor = "0";
+  version = "unstable-2020-07-06";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
-    url = "${meta.homepage}/${versionMajor}/${version}/+download/libappindicator-${version}.tar.gz";
-    sha256 = "17xlqd60v0zllrxp8bgq3k5a1jkj0svkqn8rzllcyjh8k0gpr46m";
+  src = fetchbzr {
+    url = "lp:libappindicator";
+    rev = "298";
+    sha256 = "0v5nkfzid0faa1k71mlm8jqaljfj2ly6d0qidb1ja79d4zmnbnb0";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook vala gobject-introspection ];
@@ -38,15 +37,6 @@ stdenv.mkDerivation rec {
   ] ++ (if gtkVersion == "2"
     then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ libindicator-gtk3 ]);
-
-  patches = [
-    # Remove python2 from libappindicator.
-    (fetchpatch {
-      name = "no-python.patch";
-      url = "https://src.fedoraproject.org/rpms/libappindicator/raw/8508f7a52437679fd95a79b4630373f08315f189/f/nopython.patch";
-      sha256 = "18b1xzvwsbhhfpbzf5zragij4g79pa04y1dk6v5ci1wsjvii725s";
-    })
-  ];
 
   configureFlags = [
     "CFLAGS=-Wno-error"
@@ -64,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
-    homepage = "https://launchpad.net/libappindicator";
+    homepage = "";
     license = with licenses; [ lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];
