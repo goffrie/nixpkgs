@@ -3,6 +3,8 @@
   meson,
   ninja,
   oo7,
+  oo7-server,
+  pam,
   pkg-config,
   rustPlatform,
   rustc,
@@ -30,8 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    pam
     systemdLibs
   ];
+
+  # oo7-pam hardcodes the path $out/libexec/oo7-daemon-login, which is part of oo7-server
+  postInstall = ''
+    mkdir -p "$out/libexec"
+    ln -s "${oo7-server}/libexec/oo7-daemon-login" "$out/libexec/oo7-daemon-login"
+  '';
 
   meta = {
     inherit (oo7.meta)
