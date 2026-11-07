@@ -6,6 +6,7 @@
   pkg-config,
   rustPlatform,
   testers,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests.testVersion = testers.testVersion { package = oo7; };
+    tests.nixos = nixosTests.oo7;
 
     updateScript = nix-update-script { };
   };

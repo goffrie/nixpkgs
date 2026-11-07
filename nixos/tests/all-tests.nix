@@ -1360,6 +1360,7 @@ in
   omnom = runTest ./omnom;
   oncall = runTest ./web-apps/oncall.nix;
   onlyoffice = runTest ./onlyoffice.nix;
+  oo7 = runTest ./oo7.nix;
   open-web-calendar = runTest ./web-apps/open-web-calendar.nix;
   open-webui = runTest ./open-webui.nix;
   openafs = runTest ./openafs.nix;
